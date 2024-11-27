@@ -2,4 +2,4 @@
 Music Service 
 
 # requirements
-pip install django black isort pylint pylint-django mypy django-stubs
+pip install django 

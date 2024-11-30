@@ -22,4 +22,6 @@ from musicapp import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.main_page),
+    path("signup/", views.sign_up),
+    path("login/", views.login)
 ]

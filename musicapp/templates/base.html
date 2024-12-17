@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width-device-width, initial-scale-1.0" />
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    {% block style %}{% endblock style %}
     <link rel="icon" href="{% static 'images/logo_ico.png' %}" />
     <link
       rel="stylesheet"
@@ -19,20 +20,20 @@
     <div class="sidebar">
       <div class="sidebar-nav">
         <div class="logo">
-          <a href=""
-            ><img src="{% static 'images/logo_white.png' %}" alt=""
-          /></a>
+          <a href="/">
+            <img src="{% static 'images/logo_white.png' %}" alt=""/>
+          </a>
         </div>
 
         <ul>
           <li>
-            <a href="">
+            <a href="/">
               <span><i class="fa-solid fa-house"></i></span>
               <span>Home</span>
             </a>
           </li>
           <li>
-            <a href="">
+            <a href="search">
               <span><i class="fa-solid fa-magnifying-glass"></i></span>
               <span>Search</span>
             </a>
@@ -43,7 +44,7 @@
       <div class="sidebar-nav box2">
         <ul>
           <li>
-            <a href="">
+            <a href="library">
               <span><i class="fa-solid fa-book"></i></span>
               <span class="library">Your Library</span>
             </a>
@@ -89,15 +90,32 @@
           <button><i class="fa-solid fa-chevron-left"></i></button>
           <button><i class="fa-solid fa-chevron-right"></i></button>
         </div>
-
+        {% if user.is_authenticated %}
+        <div class="profile">
+          <div class="prof-btns">
+            <a href="{% url 'profile' %}"><h4>{{ user }}</h4></a>
+            <a href="{% url 'logout' %}"><p>Log out</p></a>
+          </div>
+          {% if user.profile_photo %}
+          <a href="{% url 'profile' %}"><img src="{{ user.profile_photo.url }}"/></a>
+          {% else %}
+          <a href="{% url 'profile' %}"><img src="{{ default_photo }}"/></a>
+          {% endif %}
+        </div>
+        {% else %}
         <div class="login-btn">
-          <button class="sign-up" onclick="window.location.href='signup'">
+          <button class="sign-up" onclick="window.location.href='register'">
             Sign Up
           </button>
           <button class="login" onclick="window.location.href='login'">
             Login
           </button>
         </div>
+        {% endif%}
+      </div>
+      <div class="main-content">
+        {% block main_content %}
+        {% endblock %}
       </div>
     </div>
   </body>

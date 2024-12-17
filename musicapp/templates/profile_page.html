@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block style %} 
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock style %}
+{% block title %}GuaranaTune | Profile{% endblock title %} 
+{% block main_content %}
+<div class="profile-settings">
+  <h2><i class="fa-solid fa-user"></i> Profile Settings</h2>
+  <form method="post" enctype="multipart/form-data">
+  <div class="profile-picture">
+    {% csrf_token %}
+    {% if user.profile_photo %}
+    <img alt="Current profile picture" src="{{ user.profile_photo.url }}"/>
+    {% else %}
+    <img alt="Current profile picture" src="{{ default_photo }}"/>
+    {% endif %}
+    <h2>{{ user.first_name }}</h2>
+    {{ form.profile_photo }}
+    <label for="profile_photo">Change Profile Picture</label>
+  </div>
+    <label class="col-one-half">Login</label>
+    {{ form.username }}
+    <label class="col-one-half">Email</label>
+    {{ form.email }}
+    <label class="col-one-half">First Name</label>
+    {{ form.first_name }}
+    <button type="submit">Save Changes</button>
+  </form>
+</div>
+{% endblock main_content%}

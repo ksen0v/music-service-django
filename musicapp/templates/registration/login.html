@@ -17,35 +17,36 @@
     <div class="container">
       <header>
         <h1>
-          <a href="#">
-            <img src="{% static 'images/logo_white.png' %}" />
-          </a>
+          <img src="{% static 'images/logo_white.png' %}" />
         </h1>
       </header>
       <h1 class="text-center">Login</h1>
-      <form class="registration-form">
+      <form method="post" >
+        {% csrf_token %}
         <label>
           <span class="label-text">Email (or Login)</span>
-          <input type="text" name="email" />
+          {{ form.username }}
         </label>
         <label class="password">
           <span class="label-text">Password</span>
-          <button
-            class="toggle-visibility"
-            title="toggle password visibility"
-            tabindex="-1"
-          >
-            <span class="glyphicon glyphicon-eye-close"></span>
-          </button>
-          <input type="password" name="password" />
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" name="newsletter" />
-          <span>Remember me</span>
+          {{ form.password }}
         </label>
         <div class="text-center">
-          <button class="submit" name="register">Login Me</button>
+          <button type="submit" class="submit" name="register">Login Me</button>
         </div>
+        <style>
+          ul {
+            list-style: none;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+          }
+          .errors {
+            margin-top: 20px;
+          }
+        </style>
+        {% if form.non_field_errors %}
+        <div class="errors">{{ form.non_field_errors }}</div>
+        {% endif %}
       </form>
     </div>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

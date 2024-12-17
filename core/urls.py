@@ -18,10 +18,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from musicapp import views
+from core import settings
+from django.conf.urls.static import static
+
+handler404 = 'musicapp.views.tr_handler404'
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.main_page),
-    path("signup/", views.sign_up),
-    path("login/", views.login)
+    path("", views.home, name="home"),
+    path("login/",views.LoginUser.as_view(), name="login"),
+    path('register/', views.RegisterUser.as_view(), name='register'),
+    path("logout/", views.logout_view, name='logout'),
+    path("profile/", views.ProfileUser.as_view(), name='profile')
 ]
+
+if settings.DEBUG:
+    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

@@ -27,8 +27,8 @@
 formValidation = {
 	init: function(){
 		this.$form = $('.registration-form');
-		this.$firstName = this.$form.find('input[name="firstName"]');
-		this.$lastName = this.$form.find('input[name="lastName"]');
+		this.$firstName = this.$form.find('input[name="first_name"]');
+		this.$lastName = this.$form.find('input[name="username"]');
 		this.$email = this.$form.find('input[name="email"]');
 		this.$password = this.$form.find('input[name="password"]');
 		this.$passwordToggle = this.$form.find('button.toggle-visibility');
@@ -59,10 +59,10 @@ formValidation = {
 		this.validatedFields.lastName = this.validateText(this.$lastName);
 	},
 	validateEmailHandler: function(){
-		this.validatedFields.email = this.validateText(this.$email);
+		this.validatedFields.email = this.validateText(this.$email) && this.validateEmail(this.$email);
 	},
 	validatePasswordHandler: function(){
-		this.validatedFields.password = this.validateText(this.$password);
+		this.validatedFields.password = this.validateText(this.$password) && this.validatePassword(this.$password);
 	},
 	togglePasswordVisibilityHandler: function(){
 		var html = '<input type="text" value="'+this.$password.val()+'">';
@@ -88,6 +88,7 @@ formValidation = {
 			setTimeout((function(){
 				this.$submitButton.removeClass('loading').addClass('success').html('Welcome, '+this.$firstName.val())
 			}).bind(this), 1500);
+			this.sendResponse();
 		}else{
 			this.$submitButton.text('Please Fix the Errors');
 			setTimeout((function(){
@@ -98,6 +99,38 @@ formValidation = {
 		}
 	},
 	
+	sendResponse: function(){
+		var firstname = this.$firstName.val();
+		var lastname = this.$lastName.val();
+		var email = this.$email.val();
+		var password = this.$password.val();
+
+		var data = JSON.stringify({
+			first_name: firstname,
+			last_name: lastname,
+			email: email,
+			password: password
+		});
+
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "", true);
+		xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				if (xhr.status === 200) {
+					console.log("Response received:", xhr.responseText);
+					// Здесь можно обработать успешный ответ от сервера
+				} else {
+					console.error("Error occurred:", xhr.status, xhr.statusText);
+					// Здесь можно обработать ошибку
+				}
+			}
+		};
+
+		xhr.send(data);
+	},
+
 	validateText: function($input){
 		$input.parent().removeClass('invalid');
 		$input.parent().find('span.label-text small.error').remove();
@@ -106,6 +139,29 @@ formValidation = {
 		}else{
 			$input.parent().addClass('invalid');
 			$input.parent().find('span.label-text').append(' <small class="error">(Field is empty)</small>');
+			return false;
+		}
+	},
+	validateEmail: function($input){
+		var regEx = /\S+@\S+\.\S+/;
+		$input.parent().removeClass('invalid');
+		$input.parent().find('span.label-text small.error').remove();
+    if(regEx.test($input.val())){
+			return true;
+		}else{
+			$input.parent().addClass('invalid');
+			$input.parent().find('span.label-text').append(' <small class="error">(Email is invalid)</small>');
+			return false;
+		}
+	},
+	validatePassword: function($input){
+			$input.parent().removeClass('invalid');
+		$input.parent().find('span.label-text small.error').remove();
+		if($input.val().length >= 8){
+			return true;
+		}else{
+			$input.parent().addClass('invalid');
+			$input.parent().find('span.label-text').append(' <small class="error">(Your password must longer than 7 characters)</small>');
 			return false;
 		}
 	}

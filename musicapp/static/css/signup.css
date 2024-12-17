@@ -119,52 +119,6 @@ form label span.label-text{
 	-webkit-transition: all 0.25s;
 	transition: all 0.25s;
 }
-form label.checkbox{
-	border-bottom: 0;
-	text-align: center;
-}
-form label.checkbox input{
-	display: none;
-}
-form label.checkbox span{
-	font-size: 0.5em;
-}
-form label.checkbox span:before{
-	content: '\e157';
-	display: inline-block;
-	font-family: 'Glyphicons Halflings';
-	font-size: 1.125em;
-	padding-right: 0.25em;
-	position: relative;
-		top: 1px;
-}
-form label.checkbox input:checked + span:before{content: '\e067';}
-form label.invalid{border-color: #c0392b !important;}
-form label.invalid span.label-text{color: #c0392b;}
-form label.password{position: relative;}
-form label.password button.toggle-visibility{
-	background: none;
-	border: none;
-	cursor: pointer;
-	font-size: 0.75em;
-	line-height: 1em;
-	position: absolute;
-		top: 50%;
-		right: 0.5em;
-	text-align: center;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
-	-webkit-transition: all 0.25s;
-	transition: all 0.25s;
-}
-form label.password button.toggle-visibility:hover,
-form label.password button.toggle-visibility:focus,
-form label.password button.toggle-visibility:active{
-	color: #333;
-	outline: none;
-}
-form label.password button.toggle-visibility span{vertical-align: middle;}
 
 h1{
 	font-size: 2em;
@@ -185,4 +139,8 @@ html{
 
 .text-center{
 	text-align: center;
+}
+
+.errors ul{
+	list-style: none;
 }

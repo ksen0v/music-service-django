@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="{% static 'css/playlists.css' %}">
+</head>
+<body>
+<div class="music-container">
+    {% for genre, tracks in tracks_by_genre.items %}
+        <div class="genre-section">
+            <h2>{{ genre }}</h2>
+            <div class="tracks">
+                {% for track in tracks %}
+                    <div class="track"
+                         data-src="{{ track.mp3.url }}"
+                         data-logo="{{ track.logo.url }}"
+                         data-name="{{ track.name }}"
+                         data-author="{{ track.author }}">
+                        <img src="{{ track.logo.url }}" alt="{{ track.name }}">
+                        <div class="track-name">{{ track.name }}</div>
+                        <div class="track-author">{{ track.author }}</div>
+                    </div>
+
+
+                {% empty %}
+                    <p>No tracks available in this genre.</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>

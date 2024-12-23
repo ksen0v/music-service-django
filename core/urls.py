@@ -16,9 +16,10 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from musicapp import views
 from core import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
 
 handler404 = 'musicapp.views.tr_handler404'
@@ -26,11 +27,14 @@ handler404 = 'musicapp.views.tr_handler404'
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
-    path("login/",views.LoginUser.as_view(), name="login"),
+    path("login/", views.LoginUser.as_view(), name="login"),
     path('register/', views.RegisterUser.as_view(), name='register'),
     path("logout/", views.logout_view, name='logout'),
-    path("profile/", views.ProfileUser.as_view(), name='profile')
+    path("profile/", views.ProfileUser.as_view(), name='profile'),
+    path('player/', include("musicapp.urls")),
 ]
 
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

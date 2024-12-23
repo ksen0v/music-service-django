@@ -224,3 +224,38 @@ body{
    text-decoration: underline;
 }
 
+.status {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #1DB954;
+}
+
+.status.unpublished {
+    color: #ff3333;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    padding: 1em 0;
+    text-align: center;
+    z-index: 1000;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    footer {
+        padding: 0.8em 0;
+        font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+    footer {
+        padding: 0.6em 0;
+        font-size: 0.8rem;
+    }
+}
+

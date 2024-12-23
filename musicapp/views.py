@@ -1,4 +1,6 @@
-from django.shortcuts import render
+import json
+
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
@@ -8,7 +10,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from core import settings
 
+from musicapp.models import MusicTrack
+from django.core.paginator import Paginator
 from .forms import LoginUserForm, RegisterUserForm, ProfileUserForm
+
 
 def tr_handler404(request, exception):
     """
@@ -17,8 +22,17 @@ def tr_handler404(request, exception):
     return render(request, template_name='404.html', status=404)
 
 def home(request):
-    data = {'default_photo': settings.DEFAULT_USER_IMAGE}
-    return render(request, "main_page.html", context=data)
+    paginator = Paginator(MusicTrack.objects.all(), 1)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    genres = ['Russian Rap', 'Rap', 'Russian Rock', 'Rock']
+    tracks_by_genre = {genre: MusicTrack.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre
+                       in genres}
+
+    context = {'page_obj': page_obj, 'tracks_by_genre': tracks_by_genre}
+
+    return render(request, "player.html", context)
 
 class LoginUser(LoginView):
     form_class = LoginUserForm

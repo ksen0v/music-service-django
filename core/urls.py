@@ -27,6 +27,7 @@ handler404 = 'musicapp.views.tr_handler404'
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
+    path('playlist/<int:playlist_id>/', views.playlist_detail, name='playlist_detail'),
     path("login/", views.LoginUser.as_view(), name="login"),
     path('register/', views.RegisterUser.as_view(), name='register'),
     path("logout/", views.logout_view, name='logout'),

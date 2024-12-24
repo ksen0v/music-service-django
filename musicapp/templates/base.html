@@ -114,12 +114,11 @@
         {% endif %}
     </div>
     <div>
-        {% include 'playlists.html' %}
+        {% include marker|add:".html" %}
     </div>
     <footer>{% block player %} {% endblock %}</footer>
-
 </div>
-
 </body>
+
 
 </html>

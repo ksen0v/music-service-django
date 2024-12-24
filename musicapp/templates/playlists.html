@@ -10,6 +10,24 @@
 </head>
 <body>
 <div class="music-container">
+
+    {% for genre, playlists in playlists_by_genre.items %}
+        <div class="genre-section">
+            <h2>{{ genre }}</h2>
+            {% for playlist in playlists %}
+                <div class="track">
+                    <a href="{% url 'playlist_detail' playlist.id %}">
+                        <img src="{{ playlist.logo.url }}" alt="{{ playlist.name }}">
+                    </a>
+                    <div class="track-name">{{ playlist.name }}</div>
+                    <div class="track-author">{{ playlist.author }}</div>
+                </div>
+            {% empty %}
+                <p>No playlists available in this genre.</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
     {% for genre, tracks in tracks_by_genre.items %}
         <div class="genre-section">
             <h2>{{ genre }}</h2>

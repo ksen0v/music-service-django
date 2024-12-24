@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from core import settings
 
-from musicapp.models import MusicTrack
+from musicapp.models import MusicTrack, Playlist
 from django.core.paginator import Paginator
 from .forms import LoginUserForm, RegisterUserForm, ProfileUserForm
 
@@ -27,12 +27,30 @@ def home(request):
     page_obj = paginator.get_page(page_number)
 
     genres = ['Russian Rap', 'Rap', 'Russian Rock', 'Rock']
-    tracks_by_genre = {genre: MusicTrack.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre
-                       in genres}
+    tracks_by_genre = {genre: MusicTrack.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre in genres}
 
-    context = {'page_obj': page_obj, 'tracks_by_genre': tracks_by_genre}
+    genres_for_playlists = ['Russian Rap', 'Rap']
+    playlists_by_genre = {genre: Playlist.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre in genres_for_playlists}
+
+    context = {'page_obj': page_obj, 'tracks_by_genre': tracks_by_genre, 'playlists_by_genre': playlists_by_genre, 'marker': 'playlists'}
 
     return render(request, "player.html", context)
+
+def playlist_detail(request, playlist_id):
+    playlist = get_object_or_404(Playlist, id=playlist_id)
+    tracks = playlist.tracks.all()
+
+    paginator = Paginator(tracks, 1)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'playlist': playlist,
+        'tracks': tracks,
+        'marker': 'playlist_page',
+        'page_obj': page_obj,
+    }
+    return render(request, 'player.html', context)
 
 class LoginUser(LoginView):
     form_class = LoginUserForm

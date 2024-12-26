@@ -27,12 +27,15 @@ handler404 = 'musicapp.views.tr_handler404'
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name="home"),
-    path('playlist/<int:playlist_id>/', views.playlist_detail, name='playlist_detail'),
+    path('playlist/<int:playlist_id>/', views.show_playlist, name='show_playlist'),
     path("login/", views.LoginUser.as_view(), name="login"),
     path('register/', views.RegisterUser.as_view(), name='register'),
     path("logout/", views.logout_view, name='logout'),
     path("profile/", views.ProfileUser.as_view(), name='profile'),
     path('player/', include("musicapp.urls")),
+
+    path('search/', views.open_search_page, name='open_search_page'),
+    path('search-tracks/', views.search, name='search_tracks'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

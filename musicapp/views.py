@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
+from django.db.models import Q
+
 from core import settings
 
 from musicapp.models import MusicTrack, Playlist
@@ -26,17 +28,22 @@ def home(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    genres = ['Russian Rap', 'Rap', 'Russian Rock', 'Rock']
-    tracks_by_genre = {genre: MusicTrack.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre in genres}
-
     genres_for_playlists = ['Russian Rap', 'Rap']
     playlists_by_genre = {genre: Playlist.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre in genres_for_playlists}
 
-    context = {'page_obj': page_obj, 'tracks_by_genre': tracks_by_genre, 'playlists_by_genre': playlists_by_genre, 'marker': 'playlists'}
+    genres = ['Russian Rap', 'Rap', 'Russian Rock', 'Rock']
+    tracks_by_genre = {genre: MusicTrack.objects.filter(genre=genre, is_published=MusicTrack.Status.PUBLISHED) for genre in genres}
+
+    context = {
+        'page_obj': page_obj,
+        'tracks_by_genre': tracks_by_genre,
+        'playlists_by_genre': playlists_by_genre,
+        'marker': 'playlists'
+    }
 
     return render(request, "player.html", context)
 
-def playlist_detail(request, playlist_id):
+def show_playlist(request, playlist_id):
     playlist = get_object_or_404(Playlist, id=playlist_id)
     tracks = playlist.tracks.all()
 
@@ -50,6 +57,31 @@ def playlist_detail(request, playlist_id):
         'marker': 'playlist_page',
         'page_obj': page_obj,
     }
+    return render(request, 'player.html', context)
+
+def open_search_page(request):
+    context = {
+        'marker': 'search_page',
+    }
+    return render(request, 'player.html', context)
+
+def search(request):
+    query = request.GET.get('query', '').strip()
+
+    tracks = MusicTrack.objects.filter(name__icontains=query) | MusicTrack.objects.filter(author__icontains=query)
+
+    paginator = Paginator(tracks, 1)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    print(f"tracks: {tracks}")
+
+    context = {
+        'tracks': tracks,
+        'marker': 'search_page',
+        'page_obj': page_obj,
+    }
+
     return render(request, 'player.html', context)
 
 class LoginUser(LoginView):

@@ -16,7 +16,7 @@
             <h2>{{ genre }}</h2>
             {% for playlist in playlists %}
                 <div class="track">
-                    <a href="{% url 'playlist_detail' playlist.id %}">
+                    <a href="{% url 'show_playlist' playlist.id %}">
                         <img src="{{ playlist.logo.url }}" alt="{{ playlist.name }}">
                     </a>
                     <div class="track-name">{{ playlist.name }}</div>
